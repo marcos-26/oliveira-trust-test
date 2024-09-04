@@ -53,7 +53,7 @@ class EstacionamentoController extends Controller
     }
 
     // Método para atualizar um estacionamento
-    public function update(UpdateEstacionamentoRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $estacionamento = Estacionamento::findOrFail($id);
         $estacionamento->update($request->except('endereco'));
