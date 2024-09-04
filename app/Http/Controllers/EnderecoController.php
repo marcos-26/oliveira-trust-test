@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Endereco;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EnderecoController extends Controller
