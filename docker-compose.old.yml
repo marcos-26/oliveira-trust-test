@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  # Laravel application
+  app:
+    build:
+      context: .
+      dockerfile: old-docker/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+
+  # MongoDB
+  mongodb:
+    image: mongo
+    container_name: estacionamentodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
