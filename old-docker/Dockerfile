@@ -1,7 +1,10 @@
-FROM php:7.4-fpm
+# Use PHP 8.2 como base
+FROM php:8.2-fpm
 
+# Defina o diretório de trabalho
 WORKDIR /var/www/html
 
+# Instala as dependências do sistema e as extensões PHP necessárias
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -15,8 +18,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql zip
 
+# Instala o Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-CMD ["php-fpm"]
+# Expõe a porta 9000 para PHP-FPM
+EXPOSE 9000
 
-EXPOSE 8000
+# Comando padrão para iniciar o PHP-FPM
+CMD ["php-fpm"]

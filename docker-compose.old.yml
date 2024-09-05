@@ -1,19 +1,28 @@
 version: '3'
 
 services:
-  # Laravel application
+  # Laravel application (PHP-FPM)
   app:
     build:
       context: .
       dockerfile: old-docker/Dockerfile
-    ports:
-      - "8000:8000"
     volumes:
       - .:/var/www/html
-    links:
-      - mongodb
+    networks:
+      - backend
+
+  # Nginx
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"  # Mudança aqui, porta externa 8080
+    volumes:
+      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - mongodb
+      - app
+    networks:
+      - backend
 
   # MongoDB
   mongodb:
@@ -23,6 +32,11 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - backend
 
 volumes:
   mongodb_data:
+
+networks:
+  backend:
