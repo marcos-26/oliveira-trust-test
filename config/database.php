@@ -50,9 +50,9 @@ return [
             'database' => env('MONGODB_DATABASE', 'estacionamentodb'),
             // 'username' => env('MONGODB_USERNAME', 'admin'),
             // 'password' => env('MONGODB_PASSWORD'),
-            'options' => array(
+            'options' => [
                 'database' => env('DB_AUTHDATABASE', 'admin'),
-            ),
+            ],
         ],
 
         'mysql' => [
