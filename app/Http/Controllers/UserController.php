@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -23,6 +24,8 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        Log::info('criando usario');
+
         $user = User::create($request->all());
         return response()->json($user, 201);
     }
@@ -34,7 +37,7 @@ class UserController extends Controller
         // Verifica se o usuário existe na coleção de usuários
         $user = User::where('email', $credentials['email'])->first();
 
-        logger('Tentativa de login', ['email' => $credentials['email']]);
+        Log::info('Tentativa de login', ['email' => $credentials['email']]);
 
         [$pinTimestamp, $pinValue] = $user->pin;
         $pinExpired = now()->greaterThan($pinTimestamp);
