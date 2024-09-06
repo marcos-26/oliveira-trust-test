@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateUserRequest;
 use App\Mail\AuthPin;
 use App\Models\User;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -20,14 +21,31 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->merge([
-            'password' => Hash::make($request->password),
-        ]);
+        try {
 
-        Log::info('criando usario');
+            $request->merge([
+                'password' => Hash::make($request->password),
+            ]);
 
-        $user = User::create($request->all());
-        return response()->json($user, 201);
+            Log::info('criando usario');
+
+            $user = User::create($request->all());
+            return response()->json($user, 201);
+
+        } catch (ModelNotFoundException $e) {
+            // Captura exceções relacionadas a modelo não encontrado
+            return response()->json([
+                'success' => false,
+                'message' => 'Modelo não encontrado: ' . $e->getMessage(),
+            ], 404);
+
+        } catch (Exception $e) {
+            // Captura qualquer outra exceção
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocorreu um erro inesperado: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function login(Request $request)
@@ -45,7 +63,7 @@ class UserController extends Controller
         if (blank($credentials['pin']) || $pinExpired) {
             $user->pin = [
                 now()->addMinutes(60),
-                str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT)
+                str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT),
             ];
             $user->save();
 
