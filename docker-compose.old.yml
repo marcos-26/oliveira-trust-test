@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: old-docker/Dockerfile
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html/estacionamento
     networks:
       - backend
 
@@ -15,9 +15,9 @@ services:
   web:
     image: nginx:alpine
     ports:
-      - "8080:80"  # Mudança aqui, porta externa 8080
+      - "8080:80"
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html/estacionamento
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
