@@ -56,16 +56,17 @@ return [
         ],
 
         'mongodb' => [
-        'driver'   => 'mongodb',
-        'host'     => env('DB_HOST', 'localhost'),
-        'port'     => env('DB_PORT', 27017),
-        'database' => env('DB_DATABASE'),
-        'username' => env('DB_USERNAME'),
-        'password' => env('DB_PASSWORD'),
-        'options'  => [
-            'database' => env('DB_AUTH_SOURCE', 'admin') // Define qual DB de autenticação usar
-        ]
-    ],
+            'driver' => 'mongodb',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'options' => [
+                'authSource' => env('DB_AUTH_SOURCE', 'admin'),
+                'replicaSet' => env('DB_REPLICA_SET', 'atlas-i521f7-shard-0'),
+            ],
+        ],
 
         'mysql' => [
             'driver' => 'mysql',
