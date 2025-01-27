@@ -30,6 +30,9 @@ bash
 cd seu-repositorio
 composer install
 
+x-api-key 
+configure no .env 
+
 Configure seu docker 
 docker-compose up -d --build 
 
