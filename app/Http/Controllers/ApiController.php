@@ -2,13 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CrpnNm;
 use App\Models\File;
-use App\Models\ISIN;
-use App\Models\MktNm;
-use App\Models\RptDt;
-use App\Models\SctyCtgyNm;
-use App\Models\TckrSymb;
 use App\Models\Upload;
 use Illuminate\Http\Request;
 
