@@ -7,60 +7,139 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Projeto de Upload de Arquivo e Processamento de Dados
+Este projeto fornece uma API para fazer o upload de arquivos, salvar informações no banco de dados (MongoDB), e buscar essas informações. O sistema processa arquivos CSV e armazena dados relacionados a várias entidades, como RptDt, TckrSymb, MktNm, SctyCtgyNm, ISIN, e CrpnNm.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Requisitos
+PHP 8.x
+Laravel 8.x ou superior
+MongoDB
+Composer
+Extensão PHP MongoDB instalada
+Instalação
+Clone o repositório:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+bash
 
-## Learning Laravel
+git clone https://github.com/marcos-26/oliveira-trust-test.git
+Instale as dependências do Composer:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+bash
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+cd seu-repositorio
+composer install
+Configure seu .env para usar MongoDB:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+DB_CONNECTION=mongodb
+DB_HOST=127.0.0.1
+DB_PORT=27017
+DB_DATABASE=nome_do_banco
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+php artisan migrate
+Inicie o servidor:
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+php artisan serve
+Agora você pode acessar a API no http://localhost:8000.
 
-## Contributing
+Rotas da API
+1. POST /api/upload
+Este endpoint é responsável por realizar o upload de arquivos CSV. Ele processa os dados e os armazena no banco de dados.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Corpo da Requisição
+file (obrigatório): Arquivo CSV (com extensão .csv).
+Exemplo de Requisição (Usando Postman ou cURL)
 
-## Code of Conduct
+curl -X POST -F "file=@caminho/do/seu/arquivo.csv" http://localhost:8000/api/upload
+Resposta
+200 OK: Arquivo processado e dados salvos com sucesso.
+400 Bad Request: Se o arquivo já foi enviado ou se ocorrer algum erro ao processar o arquivo.
+Exemplo de Resposta
+json
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+{
+    "message": "Dados salvos com sucesso"
+}
+2. GET /api/history
+Este endpoint retorna o histórico de uploads realizados.
 
-## Security Vulnerabilities
+Parâmetros de Consulta (opcionais)
+filename (opcional): Filtra os uploads pelo nome do arquivo.
+reference_date (opcional): Filtra os uploads pela data de referência.
+Exemplo de Requisição
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+curl -X GET "http://localhost:8000/api/history?filename=seuarquivo.csv"
+Resposta
+200 OK: Retorna um array de uploads.
+Exemplo de Resposta
+json
 
-## License
+[
+    {
+        "_id": "ObjectId(6797c7e2686a1db45508ab01)",
+        "filename": "seuarquivo.csv",
+        "reference_date": "2025-01-27",
+        "uploaded_at": "2025-01-27T14:52:34.425-0300",
+        "created_at": "2025-01-27T14:52:34.425-0300",
+        "updated_at": "2025-01-27T14:52:34.425-0300"
+    }
+]
+3. GET /api/search
+Este endpoint permite buscar os dados processados do arquivo.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Parâmetros de Consulta (opcionais)
+TckrSymb (opcional): Filtra os dados pelo valor de TckrSymb.
+RptDt (opcional): Filtra os dados pelo valor de RptDt.
+Exemplo de Requisição
+bash
+Copiar
+Editar
+curl -X GET "http://localhost:8000/api/search?TckrSymb=AMZO34"
+Resposta
+200 OK: Retorna os dados encontrados com base nos parâmetros de consulta.
+Exemplo de Resposta
+json
+
+{
+    "data": [
+        {
+            "_id": "ObjectId(6797c7e2686a1db45508ab01)",
+            "rptDt": { "value": "2024-08-27" },
+            "tckrSymb": { "value": "AMZO34" },
+            "mktNm": { "value": "EQUITY-CASH" },
+            "sctyCtgyNm": { "value": "BDR" },
+            "isin": { "value": "BRAMZOBDR002" },
+            "crpnNm": { "value": "AMAZON.COM" }
+        }
+    ],
+    "links": {
+        "first": "http://localhost:8000/api/search?page=1",
+        "last": "http://localhost:8000/api/search?page=1"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "per_page": 20,
+        "to": 1,
+        "total": 1
+    }
+}
+Estrutura do Banco de Dados (MongoDB)
+Os dados são armazenados no MongoDB na coleção files com a seguinte estrutura:
+
+json
+
+{
+    "_id": ObjectId("6797c7e2686a1db45508ab01"),
+    "rptDt": { "value": "2024-08-27" },
+    "tckrSymb": { "value": "AMZO34" },
+    "mktNm": { "value": "EQUITY-CASH" },
+    "sctyCtgyNm": { "value": "BDR" },
+    "isin": { "value": "BRAMZOBDR002" },
+    "crpnNm": { "value": "AMAZON.COM" },
+    "created_at": ISODate("2025-01-27T14:52:34.425-0300"),
+    "updated_at": ISODate("2025-01-27T14:52:34.425-0300")
+}
