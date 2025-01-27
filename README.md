@@ -28,11 +28,14 @@ Instale as dependências do Composer:
 cd seu-repositorio
 composer install
 
-x-api-key 
+x-api-key: 
 configure no .env 
 
-Configure seu docker 
+Configure seu docker: 
 docker-compose up -d --build 
+
+crie o banco: 
+oliveira_trust
 
 Configure seu .env para usar MongoDB:
 
@@ -43,11 +46,6 @@ DB_DATABASE=nome_do_banco
 
 
 php artisan migrate
-Inicie o servidor:
-
-
-php artisan serve
-Agora você pode acessar a API no http://localhost:8000.
 
 Rotas da API
 1. POST /api/upload
