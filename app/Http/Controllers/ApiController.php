@@ -24,9 +24,9 @@ class ApiController extends Controller
         $filename = $file->getClientOriginalName();
 
         // Verifica se o arquivo já foi enviado
-        // if (Upload::where('filename', $filename)->exists()) {
-        //     return response()->json(['message' => 'Arquivo já enviado anteriormente'], 400);
-        // }
+        if (Upload::where('filename', $filename)->exists()) {
+            return response()->json(['message' => 'Arquivo já enviado anteriormente'], 400);
+        }
 
         // Salva o upload no banco
         Upload::create([
