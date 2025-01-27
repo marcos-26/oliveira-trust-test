@@ -29,6 +29,10 @@ bash
 
 cd seu-repositorio
 composer install
+
+Configure seu docker 
+docker-compose up -d --build 
+
 Configure seu .env para usar MongoDB:
 
 DB_CONNECTION=mongodb
