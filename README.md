@@ -20,12 +20,10 @@ Extensão PHP MongoDB instalada
 Instalação
 Clone o repositório:
 
-bash
 
 git clone https://github.com/marcos-26/oliveira-trust-test.git
 Instale as dependências do Composer:
 
-bash
 
 cd seu-repositorio
 composer install
@@ -100,9 +98,7 @@ Parâmetros de Consulta (opcionais)
 TckrSymb (opcional): Filtra os dados pelo valor de TckrSymb.
 RptDt (opcional): Filtra os dados pelo valor de RptDt.
 Exemplo de Requisição
-bash
-Copiar
-Editar
+
 curl -X GET "http://localhost:8000/api/search?TckrSymb=AMZO34"
 Resposta
 200 OK: Retorna os dados encontrados com base nos parâmetros de consulta.
