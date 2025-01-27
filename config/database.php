@@ -43,22 +43,12 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        'mongodb-local' => [
-            'driver' => 'mongodb',
-            'host' => env('MONGODB_HOST', 'localhost'),
-            'port' => env('MONGODB_PORT', 27017),
-            'database' => env('MONGODB_DATABASE', 'estacionamentodb'),
-            // 'username' => env('MONGODB_USERNAME', 'admin'),
-            // 'password' => env('MONGODB_PASSWORD'),
-            'options' => [
-                'database' => env('DB_AUTHDATABASE', 'admin'),
-            ],
+       'mongodb' => [
+            'driver'   => 'mongodb',
+            'dsn'      => env('MONGO_DB_DSN', 'mongodb://oliveira_trust:27017/oliveira_trust'),
+            'database' => env('MONGO_DB_DATABASE', 'oliveira_trust'),
         ],
 
-        'mongodb' => [
-            'driver'   => 'mongodb',
-            'dsn'      => env('DB_URI'),  // Usar o URI completo
-        ],
 
         'mysql' => [
             'driver' => 'mysql',
