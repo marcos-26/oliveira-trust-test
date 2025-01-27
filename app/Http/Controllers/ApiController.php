@@ -11,12 +11,11 @@ class ApiController extends Controller
     public function upload(Request $request)
 {
     $request->validate([
-        'file' => 'required|file|mimes:csv,xlsx',
+        'file' => 'required',
     ]);
 
     $file = $request->file('file');
     $filename = $file->getClientOriginalName();
-
     // Verifica se o arquivo já foi enviado
     if (Upload::where('filename', $filename)->exists()) {
         return response()->json(['message' => 'Arquivo já enviado anteriormente'], 400);
